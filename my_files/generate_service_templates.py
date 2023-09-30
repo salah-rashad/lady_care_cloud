@@ -130,3 +130,6 @@ def add_categories_to_firebase(categories: list[ServiceCategory]):
 
 if __name__ == '__main__':
     add_categories_to_firebase(categories)
+
+
+#test 
