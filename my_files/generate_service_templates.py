@@ -7,8 +7,8 @@ from models import SalonService, ServiceCategory
 db = firestore.Client(project="lady-care-ksa")
 
 
-def duration(hours=0, minutes=0, seconds=0):
-    return int(datetime.timedelta(hours=hours, minutes=minutes, seconds=seconds).total_seconds() * 1000000)
+# def duration(hours=0, minutes=0, seconds=0):
+#     return int(datetime.timedelta(hours=hours, minutes=minutes, seconds=seconds).total_seconds() * 1000000)
 
 
 categories = [
@@ -21,7 +21,7 @@ categories = [
                 id="service-1",
                 name="Service 1",
                 description="Service desc",
-                duration=duration(minutes=30),
+                duration=datetime.timedelta(minutes=30),
                 price=50,
             ),
         ],
@@ -35,7 +35,7 @@ categories = [
                 id="service-1",
                 name="Service 1",
                 description="Service desc",
-                duration=duration(minutes=30),
+                duration=datetime.timedelta(minutes=30),
                 price=50,
             ),
         ],
@@ -49,7 +49,7 @@ categories = [
                 id="service-1",
                 name="Service 1",
                 description="Service desc",
-                duration=duration(minutes=30),
+                duration=datetime.timedelta(minutes=30),
                 price=50,
             ),
         ],
@@ -63,7 +63,7 @@ categories = [
                 id="service-1",
                 name="Service 1",
                 description="Service desc",
-                duration=duration(minutes=30),
+                duration=datetime.timedelta(minutes=30),
                 price=50,
             ),
         ],
@@ -77,7 +77,7 @@ categories = [
                 id="service-1",
                 name="Service 1",
                 description="Service desc",
-                duration=duration(minutes=30),
+                duration=datetime.timedelta(minutes=30),
                 price=50,
             ),
         ],
@@ -91,7 +91,7 @@ categories = [
                 id="service-1",
                 name="Service 1",
                 description="Service desc",
-                duration=duration(minutes=30),
+                duration=datetime.timedelta(minutes=30),
                 price=50,
             ),
         ],
@@ -105,7 +105,7 @@ categories = [
                 id="service-1",
                 name="Service 1",
                 description="Service desc",
-                duration=duration(minutes=30),
+                duration=datetime.timedelta(minutes=30),
                 price=50,
             ),
         ],
@@ -119,10 +119,10 @@ def add_categories_to_firebase(categories: list[ServiceCategory]):
         category_ref = db.collection('TPL_service_categories').document(category.id)
         category_ref.set(category.to_json())
 
-        # Create a subcollection for the category's services.
+        # Create a sub-collection for the category's services.
         services_ref = category_ref.collection('TPL_services')
 
-        # Add the category's services to the subcollection.
+        # Add the category's services to the sub-collection.
         for service in category.services:
             service_ref = services_ref.document(service.id)
             service_ref.set(service.to_json())
@@ -130,6 +130,3 @@ def add_categories_to_firebase(categories: list[ServiceCategory]):
 
 if __name__ == '__main__':
     add_categories_to_firebase(categories)
-
-
-#test 

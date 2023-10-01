@@ -5,21 +5,28 @@ from google.cloud import firestore
 
 db = firestore.Client(project="lady-care-ksa")
 
+categoriesRef = db.collection("TPL_service_categories")
+categories = categoriesRef.get()
+
 # Function to generate a random TimeOfDay
+
+
 def generate_work_hours_range():
     startHour = randint(8, 10)
     return {
         'start': {
-            'hour': startHour,  
+            'hour': startHour,
             'minute': 0
         },
         'end': {
-            'hour': startHour + 8, # 8 hours work day
+            'hour': startHour + 8,  # 8 hours work day
             'minute': 0
         }
     }
 
 # Function to generate a SalonAmenity
+
+
 def generate_salon_amenity():
     return {
         'id': 'amenity_id_' + str(randint(1, 100)),
@@ -28,6 +35,8 @@ def generate_salon_amenity():
     }
 
 # Function to generate a SalonService
+
+
 def generate_salon_service():
     return {
         'id': 'service_id_' + str(randint(1, 100)),
@@ -38,7 +47,10 @@ def generate_salon_service():
     }
 
 # Function to generate a ServiceCategory
+
+
 def generate_service_category():
+    return [categories[i] for i in range(len(categories))]
     num_services = randint(1, 5)
     services = [generate_salon_service() for _ in range(num_services)]
 
@@ -50,14 +62,16 @@ def generate_service_category():
     }
 
 # Function to generate a Salon
-def generate_salon() -> tuple[dict, list[dict],list[dict]]:
+
+
+def generate_salon() -> tuple[dict, list[dict], list[dict]]:
     num_service_categories = randint(1, 4)
     service_categories = [generate_service_category() for _ in range(num_service_categories)]
 
     num_salon_amenities = randint(1, 5)
     salon_amenities = [generate_salon_amenity() for _ in range(num_salon_amenities)]
 
-    random_amenities = sample(salon_amenities, randint(1,num_salon_amenities))
+    random_amenities = sample(salon_amenities, randint(1, num_salon_amenities))
 
     return {
         'name': 'Salon ' + str(randint(1, 10)),
@@ -81,6 +95,8 @@ def generate_salon() -> tuple[dict, list[dict],list[dict]]:
     }, service_categories, salon_amenities
 
 # Function to add a Salon document to Firestore with subcollections
+
+
 def add_salon_to_firestore(salon_data, service_categories, salon_amenities):
     _, salon_ref = db.collection('salons').add(salon_data)
     print(f'Salon added with ID: {salon_ref.id}')
@@ -90,6 +106,7 @@ def add_salon_to_firestore(salon_data, service_categories, salon_amenities):
         salon_ref.collection('service_categories').add(category_data)
     for amenity_data in salon_amenities:
         db.collection('salon_amenities').add(amenity_data)
+
 
 # Generate and add sample Salon data
 for _ in range(5):  # Change the number as per your requirement
